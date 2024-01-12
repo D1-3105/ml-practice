@@ -1,0 +1,2 @@
+FROM rabbitmq:3.9.5-management
+RUN rabbitmq-plugins enable rabbitmq_mqtt rabbitmq_federation_management rabbitmq_stomp rabbitmq_prometheus
