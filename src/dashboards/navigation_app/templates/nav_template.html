@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+   <title>Model list</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+     <div class="container-fluid">
+       <a class="navbar-brand" href="#">Inference service</a>
+       <button
+         class="navbar-toggler"
+         type="button"
+         data-toggle="collapse"
+         data-target="#navbarNavDropdown"
+         aria-controls="navbarNavDropdown"
+         aria-expanded="false"
+         aria-label="Toggle navigation"
+       >
+         <span class="navbar-toggler-icon"></span>
+       </button>
+       <div class="collapse navbar-collapse" id="navbarNavDropdown">
+         <ul class="navbar-nav mr-auto">
+         </ul>
+         <ul class="navbar-nav">
+           <li class="nav-item dropdown dropleft">
+             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               Profile
+             </a>
+             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+               <p class="dropdown-item">Wallet Balance: ${{ user.balance }}</p>
+               <p class="dropdown-item">Name: {{ user.name }}</p>
+               <p class="dropdown-item">Email: {{ user.email }}</p>
+               <a class="dropdown-item" href="/balance/increase/">Add money!</a>
+             </div>
+           </li>
+         </ul>
+       </div>
+     </div>
+    </nav>
+
+
+    <div class="container">
+       <h1 class="my-4">Model List</h1>
+       {% for model in models %}
+           <div class="card my-4">
+               <div class="card-header">
+                   <h5>
+                      Model: <a href="{{ dash_site }}/model/{{ model.id }}" class="stretched-link">{{ model.name }}</a>
+                   </h5>
+               </div>
+               <ul class="list-group list-group-flush">
+                   <li class="list-group-item">Created at: {{ model.created_at }}</li>
+                   {% if model.updated_at %}
+                      <li class="list-group-item">Updated at: {{ model.updated_at }}</li>
+                   {% endif %}
+               </ul>
+           </div>
+       {% endfor %}
+    </div>
+    <!-- JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
