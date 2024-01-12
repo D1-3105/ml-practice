@@ -1,0 +1,50 @@
+version: '3.10'
+
+services:
+  rabbit:
+    image: ml-practice:rabbitmq
+    build:
+      context: ./rabbit_mq
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "5674:5672"
+      - "15674:15672"
+
+  celery:
+    image: ml-practice:celery
+    restart: always
+    build:
+      context: .
+      dockerfile: ./celery_app/Dockerfile
+    volumes:
+      - ./src:/project/src
+      - ./models:/project/models
+      - ./.docker.env:/project/.env
+    stdin_open: true
+    #  tty: true
+    #  network_mode: host # use it only with linux
+    ports:
+      - "1024-1070:1024-1070"
+    command: >
+      sh -c """
+        celery -A src.celery_application.celery beat &
+        celery -A src.celery_application.celery worker -E -Q cold_start_q,health_check_q,default_q -c 2
+      """
+    depends_on:
+      - rabbit
+      - postgres
+
+  postgres:
+    image: ml-practice:postgres
+    restart: always
+    build:
+      context: .
+      dockerfile: ./postgres/Dockerfile
+      network: host
+    ports:
+      - "5433:5433"
+    environment:
+      - PGPORT=5433
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
